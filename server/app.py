@@ -40,7 +40,7 @@ class Campers(Resource):
             new_camper = Camper(name=name, age=age)
             db.session.add(new_camper)
             db.session.commit()
-        except Exception as e:
+        except:
             db.session.rollback()
             return make_response(jsonify({"errors": ["validation errors"]}), 400)
 
@@ -48,13 +48,13 @@ class Campers(Resource):
 
 class CamperDetail(Resource):
     def get(self, id):
-        camper = Camper.query.filter(Camper.id == id).one_or_none()
+        camper = Camper.query.filter(Camper.id == id).first()
         if camper is None:
             return make_response(jsonify({"error": "Camper not found"}), 404)
         return make_response(jsonify(camper.to_dict()), 200)
 
     def patch(self, id):
-        camper = Camper.query.filter(Camper.id == id).one_or_none()
+        camper = Camper.query.filter(Camper.id == id).first()
         if camper is None:
             return make_response(jsonify({"error": "Camper not found"}), 404)
 
@@ -68,7 +68,7 @@ class CamperDetail(Resource):
             if age is not None:
                 camper.age = age
             db.session.commit()
-        except Exception as e:
+        except:
             db.session.rollback()
             return make_response(jsonify({"errors": ["validation errors"]}), 400)
 
@@ -81,7 +81,7 @@ class Activities(Resource):
 
 class ActivityDetail(Resource):
     def delete(self, id):
-        activity = Activity.query.filter(Activity.id == id).one_or_none()
+        activity = Activity.query.filter(Activity.id == id).first()
         if activity is None:
             return make_response(jsonify({"error": "Activity not found"}), 404)
 
@@ -101,7 +101,7 @@ class Signups(Resource):
             new_signup = Signup(camper_id=camper_id, activity_id=activity_id, time=time)
             db.session.add(new_signup)
             db.session.commit()
-        except Exception as e:
+        except:
             db.session.rollback()
             return make_response(jsonify({"errors": ["validation errors"]}), 400)
 
